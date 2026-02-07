@@ -1,10 +1,12 @@
 import { memo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import type { Collection } from '../types/collection'
+import { buildCollectionParam } from '../lib/collectionUrl'
 import { getCoverImageUrl, isCoverColor } from '../services/api'
 
 interface CollectionCardProps {
   collection: Collection
-  /** Grid slug used to load the list (e.g. "nov-25"). Required for server to fetch collection with stories. */
+  /** Grid slug for URL path and list (e.g. "nov-25"). */
   gridSlug?: string
 }
 
@@ -14,12 +16,13 @@ function CollectionCardComponent({ collection, gridSlug }: CollectionCardProps) 
   const coverUrl = getCoverImageUrl(collection.cover)
   const hasImage = Boolean(coverUrl)
 
-  const slugParam = gridSlug ?? collection.slug
-  const storyUrl = `/story?collectionId=${encodeURIComponent(collection.collectionId)}&slug=${encodeURIComponent(slugParam)}`
+  const slug = gridSlug ?? collection.slug ?? 'nov-25'
+  const c = buildCollectionParam(collection)
+  const to = `/${slug}?c=${encodeURIComponent(c)}&story=1`
 
   return (
-    <a
-      href={storyUrl}
+    <Link
+      to={to}
       className="block focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--text)] focus-visible:ring-offset-2 rounded-lg"
       aria-label={`Open ${collection.name}`}
     >
@@ -55,7 +58,7 @@ function CollectionCardComponent({ collection, gridSlug }: CollectionCardProps) 
         </div>
       </div>
     </article>
-    </a>
+    </Link>
   )
 }
 

@@ -15,6 +15,8 @@ export interface Story {
 export interface Collection {
   _id: string;
   collectionId: string;
+  /** Optional short code for shareable URL (e.g. uTC). */
+  code?: string;
   name: string;
   slug: string;
   cover: string;

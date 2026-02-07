@@ -2,7 +2,7 @@
  * Server-side AMP story HTML builder. Used by Vite middleware for GET /story.
  */
 
-const MEDIA_BASE = 'https://media.oono.ai/uploads';
+const MEDIA_BASE = "https://media.oono.ai/uploads";
 
 export interface StoryInput {
   background: string;
@@ -21,37 +21,39 @@ export interface CollectionInput {
 
 function escapeHtml(s: string): string {
   return s
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
 }
 
 function getMediaUrl(path: string): string {
-  if (!path || typeof path !== 'string') return '';
-  if (path.startsWith('http://') || path.startsWith('https://')) return path;
-  const p = path.startsWith('/') ? path.slice(1) : path;
+  if (!path || typeof path !== "string") return "";
+  if (path.startsWith("http://") || path.startsWith("https://")) return path;
+  const p = path.startsWith("/") ? path.slice(1) : path;
   return `${MEDIA_BASE}/${p}`;
 }
 
 function isColor(value: string): boolean {
-  if (!value || typeof value !== 'string') return false;
+  if (!value || typeof value !== "string") return false;
   const t = value.trim();
-  return t.startsWith('#') || t.startsWith('rgb(') || t.startsWith('rgba(');
+  return t.startsWith("#") || t.startsWith("rgb(") || t.startsWith("rgba(");
 }
 
 /** Extract iframe src from embedCode string. */
 function extractIframeSrc(embedCode: string): string {
   const match = embedCode.match(/src\s*=\s*["']([^"']+)["']/i);
-  return match ? match[1].trim() : '';
+  return match ? match[1].trim() : "";
 }
 
 function buildStoryPage(story: StoryInput, index: number): string {
   const id = `page-${index}`;
-  const bgType = (story.backgroundType || '').toUpperCase();
-  const thumbUrl = getMediaUrl(story.thumbnail) || 'https://placehold.co/720x1280/1a1a1a/ffffff?text=Story';
+  const bgType = (story.backgroundType || "").toUpperCase();
+  const thumbUrl =
+    getMediaUrl(story.thumbnail) ||
+    "https://placehold.co/720x1280/1a1a1a/ffffff?text=Story";
 
-  if (bgType === 'VIDEO') {
+  if (bgType === "VIDEO") {
     const videoUrl = getMediaUrl(story.background);
     const duration = story.duration && story.duration > 0 ? story.duration : 15;
     return `
@@ -72,7 +74,7 @@ function buildStoryPage(story: StoryInput, index: number): string {
       </amp-story-page>`;
   }
 
-  if (bgType === 'IMAGE') {
+  if (bgType === "IMAGE") {
     const imgUrl = getMediaUrl(story.background) || thumbUrl;
     return `
       <amp-story-page id="${id}">
@@ -87,7 +89,7 @@ function buildStoryPage(story: StoryInput, index: number): string {
       </amp-story-page>`;
   }
 
-  if (bgType === 'EMBED' && story.embedCode) {
+  if (bgType === "EMBED" && story.embedCode) {
     const iframeSrc = extractIframeSrc(story.embedCode);
     if (iframeSrc) {
       return `
@@ -110,10 +112,11 @@ function buildStoryPage(story: StoryInput, index: number): string {
     }
   }
 
-  if (bgType === 'GRADIENT' || bgType === 'BLANK' || !bgType) {
-    const color = story.background && isColor(story.background)
-      ? story.background.trim()
-      : '#000000';
+  if (bgType === "GRADIENT" || bgType === "BLANK" || !bgType) {
+    const color =
+      story.background && isColor(story.background)
+        ? story.background.trim()
+        : "#000000";
     return `
       <amp-story-page id="${id}">
         <amp-story-grid-layer template="fill">
@@ -132,16 +135,20 @@ function buildStoryPage(story: StoryInput, index: number): string {
 
 export function buildAmpStoryHtml(
   collection: CollectionInput,
-  opts: { storyIndex?: number; baseUrl?: string } = {}
+  opts: { storyIndex?: number; baseUrl?: string } = {},
 ): string {
   const stories = collection.stories ?? [];
-  const posterUrl = getMediaUrl(collection.cover) || getMediaUrl(collection.thumbnail) || 'https://placehold.co/720x1280/1a1a1a/ffffff?text=Story';
-  const title = escapeHtml(collection.name || 'Story');
-  const baseUrl = opts.baseUrl ?? '';
+  const posterUrl =
+    getMediaUrl(collection.cover) ||
+    getMediaUrl(collection.thumbnail) ||
+    "https://placehold.co/720x1280/1a1a1a/ffffff?text=Story";
+  const title = escapeHtml(collection.name || "Story");
+  const baseUrl = opts.baseUrl ?? "";
 
-  const pagesHtml = stories.length > 0
-    ? stories.map((s, i) => buildStoryPage(s, i)).join('\n')
-    : `
+  const pagesHtml =
+    stories.length > 0
+      ? stories.map((s, i) => buildStoryPage(s, i)).join("\n")
+      : `
     <amp-story-page id="page-0">
       <amp-story-grid-layer template="vertical">
         <p>No stories in this collection.</p>
@@ -170,8 +177,10 @@ export function buildAmpStoryHtml(
       amp-story-page.iframe-page amp-story-grid-layer[template="fill"]{pointer-events:auto;z-index:10}
       amp-story-page.iframe-page amp-iframe{pointer-events:auto}
       p{font-weight:normal;font-size:1.3em;line-height:1.5em;color:#fff}
-      /* Reveal AMP story built-in close (X) button - it is hidden by default via i-amphtml-story-ui-hide-button */
+      /* Reveal AMP story built-in close (X) button */
       .i-amphtml-story-ui-hide-button{display:block!important;visibility:visible!important;opacity:1!important}
+      /* Hide share button in story UI */
+      .i-amphtml-story-ui-share{display:none!important}
     </style>
   </head>
   <body>
@@ -189,7 +198,7 @@ ${pagesHtml}
 </html>`;
 }
 
-export function buildAmpErrorHtml(message: string, baseUrl = ''): string {
+export function buildAmpErrorHtml(message: string, baseUrl = ""): string {
   const escaped = escapeHtml(message);
   return `<!doctype html>
 <html ⚡>
