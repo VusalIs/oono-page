@@ -38,6 +38,7 @@ export function CollectionGrid({ slug = 'nov-25' }: CollectionGridProps) {
         <CollectionCard
           key={collection.collectionId}
           collection={collection}
+          gridSlug={slug}
         />
       ))}
     </div>

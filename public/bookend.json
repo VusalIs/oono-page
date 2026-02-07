@@ -1,0 +1,21 @@
+{
+  "bookendVersion": "v1.0",
+  "shareProviders": [
+    "twitter",
+    "facebook",
+    "pinterest",
+    "linkedin",
+    "email"
+  ],
+  "components": [
+    {
+      "type": "cta-link",
+      "links": [
+        {
+          "text": "Back to Collections",
+          "url": "/"
+        }
+      ]
+    }
+  ]
+}
