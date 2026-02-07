@@ -170,6 +170,8 @@ export function buildAmpStoryHtml(
       amp-story-page.iframe-page amp-story-grid-layer[template="fill"]{pointer-events:auto;z-index:10}
       amp-story-page.iframe-page amp-iframe{pointer-events:auto}
       p{font-weight:normal;font-size:1.3em;line-height:1.5em;color:#fff}
+      /* Reveal AMP story built-in close (X) button - it is hidden by default via i-amphtml-story-ui-hide-button */
+      .i-amphtml-story-ui-hide-button{display:block!important;visibility:visible!important;opacity:1!important}
     </style>
   </head>
   <body>
@@ -201,7 +203,7 @@ export function buildAmpErrorHtml(message: string, baseUrl = ''): string {
     <script async src="https://cdn.ampproject.org/v0.js"></script>
     <script async custom-element="amp-story" src="https://cdn.ampproject.org/v0/amp-story-1.0.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Oswald:200,300,400" rel="stylesheet" />
-    <style amp-custom>amp-story{font-family:"Oswald",sans-serif;color:#fff}amp-story-page{background-color:#000}p{color:#fff;font-size:1.3em}</style>
+    <style amp-custom>amp-story{font-family:"Oswald",sans-serif;color:#fff}amp-story-page{background-color:#000}p{color:#fff;font-size:1.3em}.i-amphtml-story-ui-hide-button{display:block!important;visibility:visible!important;opacity:1!important}</style>
   </head>
   <body>
     <amp-story standalone title="Error" publisher="oono" publisher-logo-src="${baseUrl}/assets/AMP-Brand-White-Icon.svg" poster-portrait-src="https://placehold.co/720x1280/1a1a1a/ffffff?text=Error">

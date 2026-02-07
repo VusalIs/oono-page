@@ -21,7 +21,7 @@ function CollectionCardComponent({ collection, gridSlug }: CollectionCardProps) 
     <a
       href={storyUrl}
       className="block focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--text)] focus-visible:ring-offset-2 rounded-lg"
-      aria-label={`Open ${collection.name} in story player`}
+      aria-label={`Open ${collection.name}`}
     >
       <article className="group overflow-hidden rounded-lg bg-[var(--card-bg)] transition-[transform,box-shadow] duration-300 ease-out hover:scale-[1.02] hover:shadow-[var(--card-shadow-hover)]">
       <div className="relative aspect-[9/16] w-full overflow-hidden">
