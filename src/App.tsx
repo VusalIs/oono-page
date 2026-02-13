@@ -24,11 +24,8 @@ function App() {
   const collection = c && collections ? findCollectionByParam(collections, c) : null
 
   const showPlayer = Boolean(c && storyIndex >= 1 && collection)
-  const storyUrl = collection
-    ? `/story?collectionId=${encodeURIComponent(collection.collectionId)}&slug=${encodeURIComponent(slug)}&storyIndex=${storyIndex - 1}`
-    : ''
 
-  // Debug: if URL has c but no collection matched, overlay won't show and no /story request will be sent
+  // Debug: if URL has c but no collection matched, player overlay will not open.
   if (import.meta.env.DEV && c && storyIndex >= 1 && !collection && collections?.length) {
     console.warn('[Collections] No collection matched for c=', c, 'available:', collections.map((col) => ({ name: col.name, param: buildCollectionParam(col) })))
   }
@@ -51,9 +48,9 @@ function App() {
       </main>
       {showPlayer && collection && (
         <StoryPlayerOverlay
-          key={storyUrl}
-          storyUrl={storyUrl}
-          collectionName={collection.name}
+          key={`${collection.collectionId}-${storyIndex}`}
+          collection={collection}
+          initialStoryIndex={Math.max(0, storyIndex - 1)}
           onClose={handleClosePlayer}
         />
       )}
